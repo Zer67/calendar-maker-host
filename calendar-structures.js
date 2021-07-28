@@ -1,19 +1,5 @@
 class CreneauBrut {
-    /*
-    constructor(uv,type,jour,heure_debut,heure_fin,frequence,salle,mode_ens) {
-        this.uv = uv;
-        this.type = type;
-        this.jour = jour;
-        this.heure_debut = heure_debut;
-        this.heure_fin = heure_fin;
-        this.frequence = frequence;
-        this.salle = salle;
-        if(typeof(mode_ens) != undefined) {
-            this.mode_ens = mode_ens;
-        }
-        
-    }
-    */
+    
 
     constructor(champs) {
         this.uv = champs[0];
@@ -68,14 +54,61 @@ class rrule {
     }
 }
 
+class FormDate {
+    constructor(uv,aujourdhui) {
+        this.form = document.createElement('form');
 
+        this.rubriques = [];
+        this.add();
 
-const jour_ics = {
-    LUNDI:1,
-    MARDI:2,
-    MERCREDI:3,
-    JEUDI:4,
-    VENDREDI:5,
-    SAMEDI:6,
-    DIMANCHE:7
+        this.rubriques[0].addTwoChoiceQuestion(ajoutJourRelatif(aujourdhui,uv));
+        body[0].append(new_form);
+    }
+
+    add() {
+        let new_div = new DivForm();
+        this.rubriques.push(new_div);
+        this.form.append(new_div.div);
+    }
+
+}
+
+class DivForm {
+    constructor() {
+        this.div = document.createElement('div');
+        this.div.classList.add("divFormDate");
+
+        this.inputs = [];
+
+    }
+
+    addRadioButton(date, uv) {
+        let new_input = new RadioButtonForm("choix_date",date);
+        new_input.addTextLabel(uv);
+        this.inputs.push(new_input);
+        this.div.append(new_input.radio,new_input.label);
+    }
+
+    addTwoChoiceQuestion(date,uv) {
+        this.addRadioButton(date,uv);
+        this.addRadioButton(ajouterJour(date,7),uv);
+    }
+}
+
+class RadioButtonForm {
+    constructor(name,date) {
+        this.radio = document.createElement('input');
+        this.radio.type ='radio';
+        this.radio.name ="choix_date";
+        this.date = date;
+        this.radio.value = this.date.toString();
+
+        this.label = document.createElement('label');
+        this.label.for = this.radio.value;
+        
+    }
+
+    addTextLabel(uv) {
+        this.label.innerHTML = this.radio.value.concat("  ",uv.afficherTitre());
+    }
 }

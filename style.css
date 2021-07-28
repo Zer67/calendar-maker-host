@@ -78,3 +78,8 @@ body form input[type=button]:hover{
 
 }
 */
+
+body form .divFormDate {
+    display: list-item;
+    list-style: none;
+}

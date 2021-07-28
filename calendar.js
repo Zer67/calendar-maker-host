@@ -21,45 +21,7 @@ function getEdt(event) {
 form.addEventListener('submit',getEdt,false);
 
 function generateForm(uv,aujourdhui){
-    let new_form = document.createElement('form');
-
-    let div1 = document.createElement('div');
-    let div2 = document.createElement('div');
-
-    let radio1 = document.createElement('input');
-    let radio2 = document.createElement('input');
-
-    div1.style.display = "list-item";
-    div2.style.display = "list-item";
-    div1.style.listStyle="none"
-    div2.style.listStyle="none"
-
-    radio1.type ='radio';
-    radio2.type ='radio';
-
-    radio1.class ='firstDate';
-    radio2.class ='secondDate';
-
-    radio1.name ='choix_date';
-    radio2.name ='choix_date';
-    
-    radio1.value = ajoutJourRelatif(aujourdhui,uv).toString();
-    radio2.value = ajouterJour(ajoutJourRelatif(aujourdhui,uv),7).toString();
-
-    let label1 = document.createElement('label');
-    let label2 = document.createElement('label');
-
-    label1.for = 'firstDate';
-    label2.for = 'secondDate';
-
-    label1.innerHTML = ajoutJourRelatif(aujourdhui,uv).toString().concat("  ",uv.afficherTitre());
-    label2.innerHTML = ajouterJour(ajoutJourRelatif(aujourdhui,uv),7).toString().concat("  ",uv.afficherTitre());
-
-    div1.append(radio1,label1);
-    div2.append(radio2,label2);
-
-    new_form.append(div1,div2);
-    body[0].append(new_form);
+    let form1 = new FormDate(uv,aujourdhui);
 }
 
 
