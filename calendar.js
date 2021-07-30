@@ -9,6 +9,7 @@ const form = document.getElementById('form');
 
 
 function getEdt(event) {
+    /*
     try {
         event.stopPropagation();
         event.preventDefault();
@@ -17,6 +18,11 @@ function getEdt(event) {
     } catch(err) {
         alert("Saisie incorrecte, veuillez réessayer !");
     }
+    */
+    event.stopPropagation();
+    event.preventDefault();
+    let valeur_brute = edt_texte_brut.value;
+    traitement_donnees(valeur_brute);
 }
 form.addEventListener('submit',getEdt,false);
 

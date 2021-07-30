@@ -58,11 +58,16 @@ class FormDate {
     constructor(uv,aujourdhui) {
         this.form = document.createElement('form');
 
+        this.titre = document.createElement('div');
+        this.titre.classList.add('titreFormDate');
+        this.titre.innerHTML = uv.afficherTitre();
+        this.form.append(this.titre);
+
         this.rubriques = [];
         this.add();
 
-        this.rubriques[0].addTwoChoiceQuestion(ajoutJourRelatif(aujourdhui,uv));
-        body[0].append(new_form);
+        this.rubriques[0].addTwoChoiceQuestion(ajoutJourRelatif(aujourdhui,uv),uv);
+        body[0].append(this.form);
     }
 
     add() {
@@ -86,7 +91,7 @@ class DivForm {
         let new_input = new RadioButtonForm("choix_date",date);
         new_input.addTextLabel(uv);
         this.inputs.push(new_input);
-        this.div.append(new_input.radio,new_input.label);
+        this.div.append(new_input.radioDiv);
     }
 
     addTwoChoiceQuestion(date,uv) {
@@ -97,6 +102,7 @@ class DivForm {
 
 class RadioButtonForm {
     constructor(name,date) {
+        this.radioDiv = document.createElement('div');
         this.radio = document.createElement('input');
         this.radio.type ='radio';
         this.radio.name ="choix_date";
@@ -105,10 +111,17 @@ class RadioButtonForm {
 
         this.label = document.createElement('label');
         this.label.for = this.radio.value;
+        this.radioDiv.append(this.radio,this.label);
         
     }
 
     addTextLabel(uv) {
         this.label.innerHTML = this.radio.value.concat("  ",uv.afficherTitre());
+    }
+}
+
+class FinalSubmit {
+    constructor(listeForms){
+        
     }
 }

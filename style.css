@@ -19,7 +19,7 @@ header h1 {
 
 body form {
     text-align: center;
-    margin: 10vw;
+    margin: 10vh;
     padding: 1vw;
     display: block;
     border: solid;
@@ -79,7 +79,16 @@ body form input[type=button]:hover{
 }
 */
 
+body form .titreFormDate {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: rgb(35, 35, 136);
+    padding: 0.5em;
+}
+
 body form .divFormDate {
     display: list-item;
     list-style: none;
 }
+
