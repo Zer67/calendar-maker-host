@@ -5,6 +5,59 @@ let edt_texte_brut = document.getElementById('edt');
 let body = document.getElementsByTagName("body");
 const form = document.getElementById('form');
 
+/* Obtention des différentes inputs de type date */
+let date_debut_cours = document.getElementById('date_debut_cours');
+let date_fin_cours = document.getElementById('date_fin_cours');
+
+let date_debut_vacances_1 = document.getElementById('date_debut_vacances_1');
+let date_fin_vacances_1 = document.getElementById('date_fin_vacances_1');
+
+let date_debut_vacances_2 = document.getElementById('date_debut_vacances_2');
+let date_fin_vacances_2 = document.getElementById('date_fin_vacances_2');
+
+/* Heure actuelle */
+let maintenant = new Date();
+
+/* Date de début des cours */
+date_debut_cours.min = maintenant.toISOString().split('T')[0];
+date_debut_cours.value = maintenant.toISOString().split('T')[0];
+date_debut_cours.addEventListener('change',function(){
+    let nlle_date = new Date(date_debut_cours.value);
+    date_fin_cours.value = ajouterJour(nlle_date,7*19).toISOString().split('T')[0];
+    date_debut_vacances_1.min = date_debut_cours.value;
+    date_debut_vacances_2.min = date_debut_cours.value;
+    date_fin_vacances_1.min = ajouterJour(new Date(date_debut_vacances_1.min),7).toISOString().split('T')[0];
+    date_fin_vacances_2.min = ajouterJour(new Date(date_debut_vacances_2.min),7).toISOString().split('T')[0];
+},false);
+
+/* Date des vacances */
+date_debut_vacances_1.min = date_debut_cours.value;
+date_fin_vacances_1.min = ajouterJour(new Date(date_debut_vacances_1.min),7).toISOString().split('T')[0];
+
+date_debut_vacances_2.min = date_fin_vacances_1.min;
+date_fin_vacances_2.min = ajouterJour(new Date(date_debut_vacances_2.min),7).toISOString().split('T')[0];
+
+date_debut_vacances_1.addEventListener('change',function(){
+    date_fin_vacances_1.min = ajouterJour(new Date(date_debut_vacances_1.value),7).toISOString().split('T')[0];
+    date_fin_vacances_1.value = date_fin_vacances_1.min;
+    date_debut_vacances_2.min = date_fin_vacances_1.min;
+    date_fin_vacances_2.min = ajouterJour(new Date(date_debut_vacances_2.min),7).toISOString().split('T')[0];
+},false);
+
+date_fin_vacances_1.addEventListener('change',function(){
+    date_debut_vacances_2.min = date_fin_vacances_1.min;
+    date_fin_vacances_2.min = ajouterJour(new Date(date_debut_vacances_2.min),7).toISOString().split('T')[0];
+},false);
+
+date_debut_vacances_2.addEventListener('change',function(){
+    date_fin_vacances_2.min = ajouterJour(new Date(date_debut_vacances_2.value),7).toISOString().split('T')[0];
+    date_fin_vacances_2.value = date_debut_vacances_2.min;
+},false);
+
+
+/* Date de la fin des cours */
+date_fin_cours.value = ajouterJour(maintenant,7*19).toISOString().split('T')[0];
+
 /* Obtention de l'emploi du temps au format brut fourni par l'UTBM */
 
 
@@ -27,7 +80,7 @@ function getEdt(event) {
 form.addEventListener('submit',getEdt,false);
 
 function generateForm(uv,aujourdhui){
-    let form1 = new FormDate(uv,aujourdhui);
+    return new FormDate(uv,aujourdhui);
 }
 
 
@@ -35,6 +88,7 @@ function generateForm(uv,aujourdhui){
 
 function traitement_donnees(valeur) {
     var i = 1;
+    let listeForms = [];
     let lignes = valeur.split('\n');
     var edt_semi_brut = [];
     for(ligne of lignes){
@@ -45,15 +99,55 @@ function traitement_donnees(valeur) {
         let nouveau_creneau = new CreneauBrut(elements);
         edt_semi_brut.push(nouveau_creneau);
         if(nouveau_creneau.convertFreq()==2) {
-            generateForm(nouveau_creneau,new Date());
+            listeForms.push(generateForm(nouveau_creneau,new Date(date_debut_cours.value)));
         }
 
         i++;
     }
+    submit = new FinalSubmit(listeForms,edt_semi_brut);
+    submit.submitButton.addEventListener('click',init_generation,false);
 
 
+    //generate_ics(edt_semi_brut);
+}
 
-    generate_ics(edt_semi_brut);
+function init_generation(evt) {
+    let edt = evt.currentTarget.edt;
+    for(CreneauBrut of edt) {
+        if(CreneauBrut.convertFreq()==2) {
+            for(cours of evt.currentTarget.listeForms) {
+                if(cours.titre.innerHTML === CreneauBrut.afficherTitre()) {
+                    CreneauBrut.ajouterDate(cours.form.valeur);
+                    console.log(CreneauBrut.afficherTitre());
+                }
+            }
+        } 
+    }
+    generate_ics(edt);
+}
+
+function getValueForm(evt) {
+    if(evt.currentTarget.children[1].children[0].children[0].checked) {
+        evt.currentTarget.valeur = evt.currentTarget.children[1].children[0].children[0].value;
+    } else if (evt.currentTarget.children[1].children[1].children[0].checked) {
+        evt.currentTarget.valeur = evt.currentTarget.children[1].children[1].children[0].value;
+    }
+    updateSubmission();  
+}
+
+function updateSubmission() {
+    let activateButton = true;
+    for(FormDate of submit.listeForms) {
+        if(!FormDate.form.valeur){
+            activateButton = false;
+            break;
+        }
+    }
+
+    if(activateButton) {
+        submit.submitButton.disabled = false;
+        console.log("button is active");
+    }
 }
 
 /* Génération de l'emploi du temps au format ics */
@@ -65,16 +159,10 @@ function generate_ics(edt_semi_brut) {
     console.log("Date : "+today);
     jour = today.getDay();
 
-    creneau1 = ajoutJourRelatif(today,edt_semi_brut[0]);
-
-    console.log(creneau1);
-    console.log(edt_semi_brut[0].uv+" : "+edt_semi_brut[0].convertDay());
-    
-    console.log(mettreHeure(creneau1,edt_semi_brut[0]));
 
 
     for(creneau_uv of edt_semi_brut) {
-        ajouterCreneau(cal,creneau_uv,today);
+        ajouterCreneau(cal,creneau_uv,today,0);
     }
 
 
@@ -114,11 +202,29 @@ function mettreHeure(date,creneau) {
     return [debut,fin];
 }
 
-function ajouterCreneau(cal, uv, aujourdhui) {
-    let jour_cours = ajoutJourRelatif(aujourdhui,uv);
+function ajouterCreneau(cal, uv, aujourdhui,profondeur_recursive,which_week) {
+    let jour_cours = null;
+    if(typeof(uv.date) === 'undefined' || profondeur_recursive != 0) {
+        jour_cours = ajoutJourRelatif(aujourdhui,uv);
+    } else if(profondeur_recursive == 0){
+        jour_cours = uv.date;
+    }
     let creneau = mettreHeure(jour_cours,uv);
     let titre = uv.afficherTitre();
-    let rule = new rrule('WEEKLY',ajouterJour(aujourdhui,18*7),uv.convertFreq());
+    let rule = null;
+
+    if(date_debut_vacances_1.value && profondeur_recursive == 0) {
+        rule = new rrule('WEEKLY',new Date(date_debut_vacances_1.value),uv.convertFreq());
+        ajouterCreneau(cal,uv,ajouterJour(new Date(date_fin_vacances_1.value),1),1);
+
+    } else if(date_debut_vacances_2.value && profondeur_recursive == 1) {
+        rule = new rrule('WEEKLY',new Date(date_debut_vacances_2.value),uv.convertFreq());
+        ajouterCreneau(cal,uv,ajouterJour(new Date(date_fin_vacances_2.value),1),2);
+
+    } else {
+        rule = new rrule('WEEKLY',new Date(date_fin_cours.value),uv.convertFreq());
+    }
+    /*
     console.log("subject : "+typeof(titre));
     console.log("description : "+typeof(this.mode_ens));
     console.log("location : "+typeof(this.salle))
@@ -126,7 +232,8 @@ function ajouterCreneau(cal, uv, aujourdhui) {
     console.log("end : "+typeof(creneau[1]));
     
     console.log("ruleset : "+rule);
-    if(typeof(uv.mode_ens === 'undefined')){
+    */
+    if(typeof(uv.mode_ens) === 'undefined'){
         console.log("resultat ajout : "+cal.addEvent(titre,"   -   ",uv.salle,creneau[0],creneau[1],rule));
     } else if(typeof(uv.salle) === 'undefined'){
         console.log("resultat ajout : "+cal.addEvent(titre,uv.mode_ens,"   -   ",creneau[0],creneau[1],rule));
@@ -134,5 +241,14 @@ function ajouterCreneau(cal, uv, aujourdhui) {
         console.log("resultat ajout : "+cal.addEvent(titre,uv.mode_ens,uv.salle,creneau[0],creneau[1],rule));
     }
     
+}
+
+
+
+function differenceSemaines(date1, date2)
+{
+  date1 = date1.getTime() / 86400000;
+  date2 = date2.getTime() / 86400000;
+  return Math.floor((new Number(d2 - d1).toFixed(0))/7);
 }
 

@@ -44,6 +44,10 @@ class CreneauBrut {
     convertFreq() {
         return parseInt(this.frequence,10);
     }
+
+    ajouterDate(date) {
+        this.date = date;
+    }
 }
 
 class rrule {
@@ -57,23 +61,33 @@ class rrule {
 class FormDate {
     constructor(uv,aujourdhui) {
         this.form = document.createElement('form');
+        this.form.valeur = null;
+        this.form.submitButton = null;
 
         this.titre = document.createElement('div');
         this.titre.classList.add('titreFormDate');
         this.titre.innerHTML = uv.afficherTitre();
         this.form.append(this.titre);
 
+
         this.rubriques = [];
         this.add();
 
         this.rubriques[0].addTwoChoiceQuestion(ajoutJourRelatif(aujourdhui,uv),uv);
         body[0].append(this.form);
+
+        
     }
 
     add() {
         let new_div = new DivForm();
         this.rubriques.push(new_div);
         this.form.append(new_div.div);
+    }
+
+    formEvent(submit) {
+        this.form.submitButton = submit;
+        this.form.addEventListener('change',getValueForm,false);
     }
 
 }
@@ -87,24 +101,25 @@ class DivForm {
 
     }
 
-    addRadioButton(date, uv) {
-        let new_input = new RadioButtonForm("choix_date",date);
+    addRadioButton(date, uv,id) {
+        let new_input = new RadioButtonForm("choix_date",date,id);
         new_input.addTextLabel(uv);
         this.inputs.push(new_input);
         this.div.append(new_input.radioDiv);
     }
 
     addTwoChoiceQuestion(date,uv) {
-        this.addRadioButton(date,uv);
-        this.addRadioButton(ajouterJour(date,7),uv);
+        this.addRadioButton(date,uv,"choix_1");
+        this.addRadioButton(ajouterJour(date,7),uv,"choix_2");
     }
 }
 
 class RadioButtonForm {
-    constructor(name,date) {
+    constructor(name,date,id) {
         this.radioDiv = document.createElement('div');
         this.radio = document.createElement('input');
         this.radio.type ='radio';
+        this.radio.id = id;
         this.radio.name ="choix_date";
         this.date = date;
         this.radio.value = this.date.toString();
@@ -116,12 +131,35 @@ class RadioButtonForm {
     }
 
     addTextLabel(uv) {
-        this.label.innerHTML = this.radio.value.concat("  ",uv.afficherTitre());
+        var options = {weekday: "long", year: "numeric", month: "long", day: "2-digit"};
+        let date = new Date(this.date)
+        //this.label.innerHTML = this.radio.value.concat("  ",uv.afficherTitre());
+        this.label.innerHTML = date.toLocaleDateString("fr-FR", options);
     }
 }
 
 class FinalSubmit {
-    constructor(listeForms){
-        
+    constructor(listeForms,edt){
+        this.listeForms = listeForms;
+        this.submitButton = document.createElement('input');
+        for(FormDate of this.listeForms) {
+            FormDate.formEvent(this);
+        }
+        this.submitButton.edt = edt;
+        this.submitButton.listeForms = this.listeForms;
+
+        this.submitButton.type = "submit";
+        this.submitButton.value = "Téléchargez votre emploi du temps";
+        this.submitButton.classList.add('finalSubmit');
+        this.submitButton.disabled = true;
+
+
+        this.divSubmit = document.createElement('div');
+        this.divSubmit.classList.add('divSubmit');
+        this.divSubmit.append(this.submitButton);
+
+        body[0].append(this.divSubmit);
     }
+
+    
 }

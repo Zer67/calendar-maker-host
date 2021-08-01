@@ -60,6 +60,24 @@ body form input[type=submit]:hover{
     background-color: brown;
 
 }
+
+body form .date {
+    margin: 2%;
+    text-align: justify;
+    padding: 20px;
+    border: solid;
+    border-width: 0.5em;
+    border-top-left-radius: 2em;
+    border-bottom-right-radius: 2em;
+}
+
+body form .date .date-item {
+    margin:1%;
+}
+
+body form .date input {
+    margin-bottom: unset;
+}
 /*
 body form input[type=button] {
     border: none;
@@ -90,5 +108,31 @@ body form .titreFormDate {
 body form .divFormDate {
     display: list-item;
     list-style: none;
+}
+
+body .finalSubmit {
+    border: none;
+    border-top-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    background-color: rgb(35, 35, 136);
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 15px;
+}
+
+body .finalSubmit:hover{
+    background-color: brown;
+}
+
+body .finalSubmit:disabled {
+    background-color: rgb(91, 94, 124);
+}
+
+body .divSubmit {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10vh;
 }
 

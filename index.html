@@ -23,6 +23,39 @@
 
     <form action="" id="form">
         <textarea name="" id="edt" placeholder="Copier-coller votre emploi du temps ici..."></textarea>
+
+        <div class="date">
+            <label for="date_debut">Date du début des cours : </label>
+            <input type="date" name="date_debut" id="date_debut_cours">
+        </div>
+
+        <div class="date">
+            <div class="date-item">
+                <label for="date_debut_vacances_1">Début période de vacances 1 :</label>
+                <input type="date" name="date_debut_vacances_1" id="date_debut_vacances_1">
+            </div>
+            <div class="date-item">
+                <label for="date_fin_vacances_1">Fin de période de vacances 1 :</label>
+                <input type="date" name="date_fin_vacances_1" id="date_fin_vacances_1">
+            </div>
+        </div>
+
+        <div class="date">
+            <div class="date-item">
+                <label for="date_debut_vacances_1">Début période de vacances 2 :</label>
+                <input type="date" name="date_debut_vacances_2" id="date_debut_vacances_2">
+            </div>
+            <div class="date-item">
+                <label for="date_fin_vacances_1">Fin de période de vacances 2 :</label>
+                <input type="date" name="date_fin_vacances_2" id="date_fin_vacances_2">
+            </div>
+        </div>
+
+        <div class="date">
+            <label for="date_fin">Date de la fin des cours : </label>
+            <input type="date" name="date_fin" id="date_fin_cours">
+        </div>
+
         <input type="submit" value="J'ai fini !" id="end">
     </form>
 </body>
