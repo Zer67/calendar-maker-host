@@ -118,8 +118,14 @@ function traitement_donnees(valeur) {
 
         i++;
     }
-    submit = new FinalSubmit(listeForms,edt_semi_brut);
-    submit.submitButton.addEventListener('click',init_generation,false);
+    
+    if(listeForms.length == 0) {
+        generate_ics(edt_semi_brut);
+    } else {
+        submit = new FinalSubmit(listeForms,edt_semi_brut);
+        submit.submitButton.addEventListener('click',init_generation,false);
+    }
+    
 
 
     //generate_ics(edt_semi_brut);
