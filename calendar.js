@@ -74,7 +74,7 @@ date_fin_cours.value = ajouterJour(maintenant,7*19).toISOString().split('T')[0];
 
 
 function getEdt(event) {
-    /*
+    
     try {
         event.stopPropagation();
         event.preventDefault();
@@ -83,11 +83,13 @@ function getEdt(event) {
     } catch(err) {
         alert("Saisie incorrecte, veuillez réessayer !");
     }
-    */
+    
+   /*
     event.stopPropagation();
     event.preventDefault();
     let valeur_brute = edt_texte_brut.value;
     traitement_donnees(valeur_brute);
+    */
 }
 form.addEventListener('submit',getEdt,false);
 
