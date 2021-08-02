@@ -1,5 +1,7 @@
 
-/* Gestion de la DOM */
+/*************************************
+ ******* Gestion de la DOM ***********
+ *************************************/
 
 let edt_texte_brut = document.getElementById('edt');
 let body = document.getElementsByTagName("body");
@@ -57,6 +59,12 @@ date_debut_vacances_2.addEventListener('change',function(){
 
 /* Date de la fin des cours */
 date_fin_cours.value = ajouterJour(maintenant,7*19).toISOString().split('T')[0];
+
+
+
+
+
+
 
 /* Obtention de l'emploi du temps au format brut fourni par l'UTBM */
 
