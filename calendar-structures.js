@@ -73,6 +73,7 @@ class FormDate {
         this.rubriques = [];
         this.add();
 
+
         this.rubriques[0].addTwoChoiceQuestion(ajoutJourRelatif(aujourdhui,uv),uv);
         body[0].append(this.form);
 
@@ -132,7 +133,7 @@ class RadioButtonForm {
 
     addTextLabel(uv) {
         var options = {weekday: "long", year: "numeric", month: "long", day: "2-digit"};
-        let date = new Date(this.date)
+        let date = new Date(this.date);
         //this.label.innerHTML = this.radio.value.concat("  ",uv.afficherTitre());
         this.label.innerHTML = date.toLocaleDateString("fr-FR", options);
     }

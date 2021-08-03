@@ -81,8 +81,10 @@ function getEdt(event) {
         let valeur_brute = edt_texte_brut.value;
         traitement_donnees(valeur_brute);
     } catch(err) {
+        console.log(err);
         alert("Saisie incorrecte, veuillez réessayer !");
     }
+    
     
    /*
     event.stopPropagation();
@@ -118,7 +120,6 @@ function traitement_donnees(valeur) {
 
         i++;
     }
-    
     if(listeForms.length == 0) {
         generate_ics(edt_semi_brut);
     } else {
@@ -174,10 +175,6 @@ function updateSubmission() {
 
 function generate_ics(edt_semi_brut) {
     var cal = ics();
-    
-    var today = new Date();
-    console.log("Date : "+today);
-    jour = today.getDay();
 
 
 
@@ -196,6 +193,12 @@ function generate_ics(edt_semi_brut) {
 function ajouterJour(date,nbre_jours){
     let new_date = new Date(date.valueOf());
     new_date.setDate(date.getDate()+nbre_jours);
+    /*
+    console.log("ajouterJour : ");
+    console.log("date : "+date.getDate());
+    console.log("nbre_jours : "+nbre_jours);
+    console.log("fin ajouterJour");
+    */
     return new_date;
 }
 
@@ -206,6 +209,7 @@ function ajouterJour(date,nbre_jours){
  * @returns 
  */
 function comparaisonJours(jour1,jour2){
+    //console.log(jour2+" - "+jour1+" = ");
     return (7+jour2-jour1)%7;
 }
 
@@ -236,8 +240,11 @@ function ajouterCreneau(cal, uv, aujourdhui,profondeur_recursive,which_week,isNe
         isNextWeek = (ajoutJourRelatif(aujourdhui,uv).getDate() == new Date(jour_cours).getDate());
         console.log(isNextWeek);
     }
+    if(!(new Date(jour_cours))){
+        throw "Erreur de date !";
+    }
 
-    console.log(uv.afficherTitre()+" "+jour_cours);
+    //console.log(uv.afficherTitre()+" "+jour_cours);
     let creneau = mettreHeure(jour_cours,uv);
     let titre = uv.afficherTitre();
     let rule = null;
@@ -265,7 +272,7 @@ function ajouterCreneau(cal, uv, aujourdhui,profondeur_recursive,which_week,isNe
 
     } else if(date_debut_vacances_2.value && profondeur_recursive == 1) {
         rule = new rrule('WEEKLY',new Date(date_debut_vacances_2.value),uv.convertFreq());
-        console.log(knowLengthPeriod("vacances_1","vacances_2"));
+        //console.log(knowLengthPeriod("vacances_1","vacances_2"));
         /* Conditions pour placer le prochain cours au retour des vacances 2 */
         if((knowLengthPeriod("vacances_1","vacances_2")) % 2 == 0 && uv.convertFreq() > 1) {
             if(isNextWeek) {
