@@ -27,7 +27,6 @@ class CreneauBrut {
 
     convertHour() {
         let array = this.heure_debut.split(':').concat(this.heure_fin.split(':'));
-        let i = 0;
         //console.log(array);
         let array_number = [];
         for(let mot of array) {

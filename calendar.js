@@ -133,13 +133,16 @@ function traitement_donnees(valeur) {
 
         let elements = ligne.split('\t');
         elements.splice(1,1);
-        let nouveau_creneau = new CreneauBrut(elements);
-        edt_semi_brut.push(nouveau_creneau);
-        if(nouveau_creneau.convertFreq()==2) {
-            listeForms.push(generateForm(nouveau_creneau,new Date(date_debut_cours.value)));
-        }
+        if(typeof(elements[1]) !='undefined' ) {
+            let nouveau_creneau = new CreneauBrut(elements);
+            edt_semi_brut.push(nouveau_creneau);
+            if(nouveau_creneau.convertFreq()==2) {
+                listeForms.push(generateForm(nouveau_creneau,new Date(date_debut_cours.value)));
+            }
 
-        i++;
+            i++;
+        }
+        
     }
     if(listeForms.length == 0) {
         generate_ics(edt_semi_brut);
