@@ -3,19 +3,19 @@
  ******* Gestion de la DOM ***********
  *************************************/
 
-let edt_texte_brut = document.getElementById('edt');
-let body = document.getElementsByTagName("body");
-const form = document.getElementById('form');
+let edt_texte_brut = $('#edt')[0];
+let body = $("body");
+const form = $('#form')[0];
 
 /* Obtention des différentes inputs de type date */
-let date_debut_cours = document.getElementById('date_debut_cours');
-let date_fin_cours = document.getElementById('date_fin_cours');
+let date_debut_cours = $('#date_debut_cours')[0];
+let date_fin_cours = $('#date_fin_cours')[0];
 
-let date_debut_vacances_1 = document.getElementById('date_debut_vacances_1');
-let date_fin_vacances_1 = document.getElementById('date_fin_vacances_1');
+let date_debut_vacances_1 = $('#date_debut_vacances_1')[0];
+let date_fin_vacances_1 = $('#date_fin_vacances_1')[0];
 
-let date_debut_vacances_2 = document.getElementById('date_debut_vacances_2');
-let date_fin_vacances_2 = document.getElementById('date_fin_vacances_2');
+let date_debut_vacances_2 = $('#date_debut_vacances_2')[0];
+let date_fin_vacances_2 = $('#date_fin_vacances_2')[0];
 
 /* Heure actuelle */
 let maintenant = new Date();
@@ -64,11 +64,32 @@ date_debut_vacances_2.addEventListener('change',function(){
 /* Date de la fin des cours */
 date_fin_cours.value = ajouterJour(maintenant,7*19).toISOString().split('T')[0];
 
+/*************************************
+ ******* Fonction(s) jQuery **********
+ *************************************/
+
+function scrollToAnimation(target, speed,additionalPixels) {
+    console.log(target);
+    $target = $(target);
+    console.log($target);
+    console.log("position : "+$target.offset().top);
+    console.log("hieght : "+$target.height());
+    if(typeof(speed) === 'undefined' || speed <= 0) {
+        speed = 1000;
+    }
+
+    if(typeof(additionalPixels) === 'undefined' || additionalPixels < 0) {
+        additionalPixels = 0;
+    }
+    $('html, body').animate( {scrollTop: $target.offset().top - $(window).height() + $target.height() + parseInt($target.css('marginLeft'), 10) + additionalPixels },speed);
+
+}
 
 
 
-
-
+/*************************************
+ ******* Traitment des données *******
+ *************************************/
 
 /* Obtention de l'emploi du temps au format brut fourni par l'UTBM */
 
@@ -123,6 +144,7 @@ function traitement_donnees(valeur) {
     if(listeForms.length == 0) {
         generate_ics(edt_semi_brut);
     } else {
+        scrollToAnimation(listeForms[0].form,500);
         submit = new FinalSubmit(listeForms,edt_semi_brut);
         submit.submitButton.addEventListener('click',init_generation,false);
     }
@@ -147,6 +169,10 @@ function init_generation(evt) {
     generate_ics(edt);
 }
 
+/**
+ * @brief Fonction permettant de connaître quelle checkbox d'un form a été cliquée.
+ * @param {Event} evt 
+ */
 function getValueForm(evt) {
     if(evt.currentTarget.children[1].children[0].children[0].checked) {
         evt.currentTarget.valeur = evt.currentTarget.children[1].children[0].children[0].value;
@@ -156,16 +182,23 @@ function getValueForm(evt) {
     updateSubmission();  
 }
 
+
 function updateSubmission() {
     let activateButton = true;
     for(FormDate of submit.listeForms) {
         if(!FormDate.form.valeur){
+            scrollToAnimation(FormDate.form,500);
             activateButton = false;
             break;
         }
     }
 
-    if(activateButton) {
+    /* On réalise un test pour savoir si tous les forms ont été cliqué si et seulement si l'utilisateur
+     * le bouton n'est pas actif. Auquel cas on n'effectue pas d'opérations inutiles. Sinon on active ce
+     * bouton.
+     */
+    if(activateButton && submit.submitButton.disabled) {
+        scrollToAnimation(body,500,80);
         submit.submitButton.disabled = false;
         console.log("button is active");
     }
