@@ -144,6 +144,9 @@ function traitement_donnees(valeur) {
         }
         
     }
+    if(edt_semi_brut.length == 0) {
+        throw "Erreur de saisie : veuillez rentrer au moins un créneau!";
+    }
     if(listeForms.length == 0) {
         generate_ics(edt_semi_brut);
     } else {

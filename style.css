@@ -150,5 +150,10 @@ body .divSubmit {
         border-width: 0.5em;
 
     }
+
+    body .finalSubmit {
+        font-size: 1em;
+        padding: 10px;
+    }
 }
 
