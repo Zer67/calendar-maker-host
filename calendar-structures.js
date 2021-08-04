@@ -74,7 +74,8 @@ class FormDate {
 
 
         this.rubriques[0].addTwoChoiceQuestion(ajoutJourRelatif(aujourdhui,uv),uv);
-        body[0].append(this.form);
+        body.append(this.form);
+        body.append($('footer'));
 
         
     }
@@ -158,7 +159,8 @@ class FinalSubmit {
         this.divSubmit.classList.add('divSubmit');
         this.divSubmit.append(this.submitButton);
 
-        body[0].append(this.divSubmit);
+        body.append(this.divSubmit);
+        body.append($('footer'));
     }
 
     
