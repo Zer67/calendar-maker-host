@@ -139,3 +139,16 @@ body .divSubmit {
     margin-bottom: 10vh;
 }
 
+@media (max-width: 750px) {
+    body form {
+        margin: 2vh;
+        margin-bottom: 10vh;
+    }
+
+    body form textarea {
+
+        border-width: 0.5em;
+
+    }
+}
+

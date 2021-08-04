@@ -81,7 +81,7 @@ function scrollToAnimation(target, speed,additionalPixels) {
     if(typeof(additionalPixels) === 'undefined' || additionalPixels < 0) {
         additionalPixels = 0;
     }
-    $('html, body').animate( {scrollTop: $target.offset().top - $(window).height() + $target.height() + parseInt($target.css('marginLeft'), 10) + additionalPixels },speed);
+    $('html, body').animate( {scrollTop: $target.offset().top - $(window).height() + $target.height() + parseInt($target.css('marginBottom'), 10) + additionalPixels },speed);
 
 }
 
@@ -133,7 +133,7 @@ function traitement_donnees(valeur) {
 
         let elements = ligne.split('\t');
         elements.splice(1,1);
-        if(typeof(elements[1]) !='undefined' ) {
+        if(typeof(elements[1]) != 'undefined' ) {
             let nouveau_creneau = new CreneauBrut(elements);
             edt_semi_brut.push(nouveau_creneau);
             if(nouveau_creneau.convertFreq()==2) {
