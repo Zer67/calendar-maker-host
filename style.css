@@ -148,6 +148,25 @@ body .divSubmit {
     margin-bottom: 10vh;
 }
 
+footer {
+    width: 100%;
+    background: rgba(255,255,255,0.5);
+    padding: 10px;
+    text-align: center;
+}
+
+.documentation a, .documentation a:visited {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+.artist {
+    text-align: right;
+    padding-right: 20px;
+}
+
+
 @media (max-width: 750px) {
     body form {
         margin: 2vh;
